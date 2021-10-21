@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
 import {BASE_URL, BERLIN_LOCATION} from "../../utils/const";
-import { Bike, BikeSearchRequest, BikeSearchResponse } from '../../models';
+import {Bike, BikeCountRequest, BikeCountResponse, BikeSearchRequest} from '../../models';
+import {asUrParams} from "../../utils/functions";
 
 export const bikeFeature = createApi({
   reducerPath: 'bikes',
@@ -12,23 +12,21 @@ export const bikeFeature = createApi({
     return {
       getBikes: builder.query<Bike[], BikeSearchRequest | void>({
         query({page = 1, per_page = 10, stolenness = "proximity", location = BERLIN_LOCATION, distance = "10", query}: BikeSearchRequest) {
-
-          const s = new URLSearchParams('');
-          s.append("page", page.toString());
-          s.append("per_page", per_page.toString());
-          s.append("location", location);
-          s.append("distance", distance);
-          s.append("stolenness", stolenness);
-
-          if (query) {
-            s.append("query", query)
-          }
+          const s = asUrParams({page, per_page, stolenness, location, distance, query});
           return `/search?${s.toString()}`;
         },
-        transformResponse: (response: { bikes: Bike[] }, meta ): Bike[] | Promise<Bike[]> => response.bikes
+        keepUnusedDataFor: 0,
+        transformResponse: (response: { bikes: Bike[] }): Bike[] | Promise<Bike[]> => response.bikes
       }),
+      getBikesCount: builder.query<BikeCountResponse, BikeCountRequest | void>({
+        query({stolenness = "proximity", location = BERLIN_LOCATION, distance = "10", query}: BikeCountRequest) {
+          const s = asUrParams({stolenness, location, distance, query});
+          return `/search/count?${s.toString()}`;
+        },
+        keepUnusedDataFor: 0,
+      })
     }
   }
 })
 
-export const { useGetBikesQuery } = bikeFeature;
+export const { useGetBikesQuery, useGetBikesCountQuery } = bikeFeature;
