@@ -28,7 +28,7 @@ export const BikeListLoader = ({size}: Props) => {
                 </Thead>
                 <Tbody>
                     {range(size).map(x => (
-                        <Tr>
+                        <Tr key={x}>
                             <Td><SkeletonText size="10" noOfLines={3} spacing={1} /></Td>
                             <Td><SkeletonText size="10" noOfLines={3} spacing={1} /></Td>
                             <Td><SkeletonText size="10" noOfLines={3} spacing={1} /></Td>

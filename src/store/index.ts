@@ -1,13 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { bikeFeature } from '../features/bikes/bike.slice';
-import paginationReducer from "../features/pagination/pagination.slice";
-import searchReducer from '../features/search/search.slice'
+import modalReducer from '../features/modal/modal.slice';
+import applicationReducer from '../features/application/application.slice';
 
 export const store = configureStore({
   reducer: {
     [bikeFeature.reducerPath]: bikeFeature.reducer,
-    pagination: paginationReducer,
-    search: searchReducer
+    modal: modalReducer,
+    application: applicationReducer,
   },
   middleware: (defaultMiddleware) => {
     return defaultMiddleware().concat(bikeFeature.middleware)

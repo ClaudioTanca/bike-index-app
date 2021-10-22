@@ -5,12 +5,13 @@ import {BikeList} from "../components/bike-list/bike-list";
 import {useAppDispatch, useAppSelector} from "../store/hooks";
 import {useEffect, useMemo} from "react";
 import {SearchField} from "../components/search/search-field";
-import {setPageCount} from "../features/pagination/pagination.slice";
+import {setPageCount} from "../features/application/application.slice";
+import { Button } from '@chakra-ui/button';
+import { openModal } from '../features/modal/modal.slice';
 
 export const HomePage = () => {
   const dispatch = useAppDispatch();
-  const { query } = useAppSelector(x => x.search);
-  const { currentPage, pageSize } = useAppSelector(x => x.pagination);
+  const { currentPage, pageSize, query } = useAppSelector(store => store.application);
   const { data = [], isFetching } = useGetBikesQuery({ query: query, page: currentPage, per_page: pageSize })
   const {data: count = {proximity: 0}} = useGetBikesCountQuery({query: query});
 
@@ -22,6 +23,7 @@ export const HomePage = () => {
   return (
     <>
       <SearchField />
+      <Button m="6" onClick={() => dispatch(openModal({ title: 'New Title' }))}>Open Modal</Button>
       {isFetching && <BikeListLoader size={5} />}
       {!isFetching && <BikeList bikes={data} />}
     </>

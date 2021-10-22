@@ -11,6 +11,7 @@ export const BikeListHeader = (props: Props) => {
             <Th>Title</Th>
             <Th>Date Stolen</Th>
             <Th>Year</Th>
+            <Th></Th>
         </Tr>
     );
 };
