@@ -1,18 +1,21 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {Bike} from "../../models";
+import { store } from "../../store";
 
 export interface ModalContent {
   isError?: false,
   title?: string,
   text?: string | null,
-  data?: object | any[] | null,
+  data?: object  | any[] | null,
+  bike?: Bike,
 };
 export interface ModalState {
   isOpen: boolean,
   isError?: boolean,
   title?: string,
   text?: string | null,
-  data?: object | any[] | null,
+  data?: object | Bike | any[] | null,
+  bike?: Bike | null,
 };
 
 const initialState: ModalState = {
@@ -21,6 +24,7 @@ const initialState: ModalState = {
   title: 'Title',
   text: null,
   data: null,
+  bike: null,
 };
 
 const modalSlice = createSlice({
@@ -33,6 +37,7 @@ const modalSlice = createSlice({
       state.title = action.payload.title || 'Title';
       state.text = action.payload.text || null;
       state.data = action.payload.data || null; 
+      state.bike = action.payload.bike || null;
     },
     closeModal(state) {
       state.isOpen = false;
@@ -40,6 +45,7 @@ const modalSlice = createSlice({
       state.title = 'Title';
       state.text = null;
       state.data = null; 
+      state.bike = null;
     },
   }
 });

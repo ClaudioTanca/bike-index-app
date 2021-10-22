@@ -15,7 +15,7 @@ export const BikeListRow = ({ bike }: Props) => {
     const dispatch = useAppDispatch();
     const openDetails = () => dispatch(openModal({
         title,
-        data: bike,
+        bike,
     }));
 
     return (
