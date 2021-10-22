@@ -22,7 +22,7 @@ const BaseModal = () => {
   const onClose = () => dispatch(closeModal());
 
   return (
-    <Modal colorScheme={ isError ? 'red' : 'teal' } isOpen={isOpen} onClose={onClose}>
+    <Modal colorScheme={ isError ? 'red' : 'teal' } isOpen={isOpen} onClose={onClose} scrollBehavior="inside">
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>{ title ? title : 'Modal Title'}</ModalHeader>
@@ -33,8 +33,8 @@ const BaseModal = () => {
             <UnorderedList listStyleType="none">
               {
                 Object.entries(data).map(([k, v]) => (
-                  <ListItem key={k}>
-                    <Text display="inline-block" fontWeight="bold">{k}:</Text> <Text display="inline-block">{v}</Text>
+                  <ListItem key={k} >
+                    <Text display="inline-block" fontWeight="bold">{k}:</Text> <Text wordBreak="break-all" display="inline-block">{v}</Text>
                   </ListItem>
                 ))
               }
