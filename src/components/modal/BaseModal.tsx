@@ -8,8 +8,7 @@ import {
   ModalCloseButton,
   Button,
   Text,
-  UnorderedList,
-  ListItem,
+  Box,
   Flex,
   Image,
 } from "@chakra-ui/react";
@@ -20,11 +19,20 @@ import { closeModal } from '../../features/modal/modal.slice';
 import { isBoolean, isObject, isString } from "lodash";
 import { formatDate } from "../../utils/functions";
 import { Loader } from "../utility/Loader";
+import { useHistory } from "react-router-dom";
 
 const BaseModal = () => {
+  const Router = useHistory();
   const { isOpen, isError, title, text, bike, /* confirm, confirmText */ }: ModalState = useAppSelector((store) => store.modal);
   const dispatch = useAppDispatch();
   const onClose = () => dispatch(closeModal());
+  const onConfirm = () => {
+    console.log('confirmed');
+    if (isObject(bike))  { 
+      Router.push(`/${bike.id}`);
+      dispatch(closeModal());
+    }
+  }
   const isDateNum = (str: string): boolean => /^date_/.test(str);
   const isImageUrl = (str: string): boolean => /[^/]+(jpg|jpeg|png)$/.test(str);
 
@@ -42,7 +50,7 @@ const BaseModal = () => {
       <ModalContent>
         <ModalHeader>{ title ? title : 'Modal Title'}</ModalHeader>
         <ModalCloseButton />
-        <ModalBody bgColor="teal.50" pt="2" pb="4">
+        <ModalBody pt="2" pb="4">
           {text && <Text>{text}</Text>}
             {isObject(bike) &&
               <Flex flexDirection="column" justifyContent="center" alignItems="center">
@@ -64,7 +72,7 @@ const BaseModal = () => {
                   {
                     Object.entries(bike).map(([k, v]) => (
                       (v && !isImageUrl(v)) && 
-                      <Text key={k} py="1" px="2" rounded="md">
+                      <Box display="inline-block" key={k} py="1" px="2" rounded="md">
                         <Text 
                           display="inline-block" 
                           fontWeight="bold" 
@@ -86,7 +94,7 @@ const BaseModal = () => {
                                 : v
                           }
                         </Text>
-                      </Text>
+                      </Box>
                     ))
                   }
                 </Flex>
@@ -97,7 +105,7 @@ const BaseModal = () => {
           <Button w={["full", "fit-content"]} variant="outline" mb={[3, 0]}  mr={[0, 3]} onClick={onClose}>
             Close
           </Button>
-          <Button w={["full", "fit-content"]} colorScheme="teal">Confirm</Button>
+          <Button w={["full", "fit-content"]} colorScheme="teal" onClick={onConfirm}>View Full Detail</Button>
 {/*           {confirm &&
             <Button onClick={confirm} w={["full", "fit-content"]} colorScheme="teal">{confirmText ? confirmText : 'Confirm'}</Button>
           } */}

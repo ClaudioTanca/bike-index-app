@@ -3,19 +3,14 @@ import {Bike} from "../../models";
 import { store } from "../../store";
 
 export interface ModalContent {
-  isError?: false,
-  title?: string,
-  text?: string | null,
-  data?: object  | any[] | null,
-  bike?: Bike,
-};
-export interface ModalState {
-  isOpen: boolean,
   isError?: boolean,
   title?: string,
   text?: string | null,
-  data?: object | Bike | any[] | null,
+  data?: object | any[] | null,
   bike?: Bike | null,
+};
+export interface ModalState extends ModalContent {
+  isOpen: boolean,
 };
 
 const initialState: ModalState = {

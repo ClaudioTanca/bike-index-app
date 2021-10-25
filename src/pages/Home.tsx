@@ -12,7 +12,7 @@ import { openModal } from '../features/modal/modal.slice';
 export const HomePage = () => {
   const dispatch = useAppDispatch();
   const { currentPage, pageSize, query } = useAppSelector(store => store.application);
-  const { data = [], isFetching } = useGetBikesQuery({ query: query, page: currentPage, per_page: pageSize })
+  const { data = [], isFetching } = useGetBikesQuery({ query: query, page: currentPage, per_page: pageSize });
   const {data: count = {proximity: 0}} = useGetBikesCountQuery({query: query});
 
   useEffect(() => {
@@ -23,7 +23,6 @@ export const HomePage = () => {
   return (
     <>
       <SearchField />
-      <Button m="6" onClick={() => dispatch(openModal({ title: 'New Title' }))}>Open Modal</Button>
       {isFetching && <BikeListLoader size={5} />}
       {!isFetching && <BikeList bikes={data} />}
     </>
