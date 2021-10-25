@@ -8,6 +8,8 @@ import {SearchField} from "../components/search/search-field";
 import {setPageCount} from "../features/application/application.slice";
 import { Button } from '@chakra-ui/button';
 import { openModal } from '../features/modal/modal.slice';
+import { PaginationControls } from '../components/pagination/pagination-controls';
+import { Box } from '@chakra-ui/layout';
 
 export const HomePage = () => {
   const dispatch = useAppDispatch();
@@ -22,9 +24,14 @@ export const HomePage = () => {
 
   return (
     <>
-      <SearchField />
-      {isFetching && <BikeListLoader size={5} />}
-      {!isFetching && <BikeList bikes={data} />}
+      <Box flex='1' flexDir={'row'} overflow={'auto'} padding={5}>
+        <SearchField />
+        {isFetching && <BikeListLoader size={5} />}
+        {!isFetching && <BikeList bikes={data} />}
+      </Box>
+      <Box bg='teal.700' color='white' padding={'5'}>
+          <PaginationControls />
+      </Box>
     </>
   );
 };

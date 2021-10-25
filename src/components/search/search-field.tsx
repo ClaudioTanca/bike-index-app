@@ -13,5 +13,5 @@ export const SearchField = () => {
     };
     const delayedOnKeyPress = useMemo(() => debounce(onChange, 1000), [])
     // @ts-ignore
-    return <Input placeholder="Search" size={"lg"} type="text" onChange={delayedOnKeyPress}/>;
+    return <Input mb="10" placeholder="Search" size={"lg"} type="text" onChange={delayedOnKeyPress}/>;
 };

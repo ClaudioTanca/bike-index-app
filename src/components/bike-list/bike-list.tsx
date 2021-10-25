@@ -9,7 +9,7 @@ type Props = { bikes: Bike[] | undefined };
 export const BikeList = ({bikes}: Props) => {
     return (
         <>
-            <Table>
+            <Table mb="10">
                 <Thead>
                     <BikeListHeader />
                 </Thead>

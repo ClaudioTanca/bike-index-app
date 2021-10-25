@@ -27,149 +27,156 @@ export const DetailsPage = () => {
   const { data, isFetching, isError, isSuccess } = useGetBikeDetailsQuery({ id: parseInt(id) });
   if (isSuccess && data !== undefined) {
     return (
-      <Flex flexDirection="column" justifyContent="center">
-        <Flex flexDir={['column', 'row']} justifyContent={['center', 'space-between']} alignItems="center">
-          <Button onClick={() => Router.push('/')} colorScheme="teal" display={['none', 'block']} mr="4">
-            <MdOutlineArrowBack />
-          </Button> 
-          <Heading as="h2" size="lg">{data.title}</Heading> <span>{' '}</span>
-        </Flex>
-        <Image 
-          src={data.large_img} 
-          // fallBackSrc={bike.thumb}
-          fallback={<Loader />}
-          w="container.xs"
-          objectFit="cover" 
-          rounded="md"
-          mt="2"
-          mb="4"
-          maxH="md"
-        />
-        <Flex wrap="wrap">
-          {
-            Object.entries(data).map(([k, v]) => (
-              (v && !isNestObj(k) && !isImageUrl(v)) && 
-              <Box display="inline-block" key={k} py="1" px="2" rounded="md">
+      <>
+        <Box flex='1' flexDir={'row'} overflow={'auto'} padding={5}>
+          <Flex flexDirection="column" justifyContent="center">
+            <Flex flexDir={['column', 'row']} justifyContent={['center', 'space-between']} alignItems="center">
+              <Button onClick={() => Router.push('/')} colorScheme="teal" display={['none', 'block']} mr="4">
+                <MdOutlineArrowBack />
+              </Button> 
+              <Heading as="h2" size="lg">{data.title}</Heading> <span>{' '}</span>
+            </Flex>
+            <Image 
+              src={data.large_img} 
+              // fallBackSrc={bike.thumb}
+              fallback={<Loader />}
+              w="container.xs"
+              objectFit="cover" 
+              rounded="md"
+              mt="2"
+              mb="4"
+              maxH="md"
+            />
+            <Flex wrap="wrap">
+              {
+                Object.entries(data).map(([k, v]) => (
+                  (v && !isNestObj(k) && !isImageUrl(v)) && 
+                  <Box display="inline-block" key={k} py="1" px="2" rounded="md">
+                    <Text
+                      display="inline-block" 
+                      fontWeight="bold" 
+                      textTransform="capitalize"
+                      color="teal.700"
+                    >
+                        {k.replaceAll('_', ' ')}:
+                    </Text>
+                    <span>{' '}</span> 
+                    <Text 
+                      wordBreak="break-all" 
+                      display="inline-block"
+                    >
+                      {
+                        isBoolean(v) 
+                          ? v.toString() 
+                          : isDateNum(k)
+                            ? formatDate(v)
+                            : v
+                      }
+                    </Text>
+                  </Box>
+                ))
+              }
+              <Box display="inline-block" py="1" px="2" rounded="md">
                 <Text
                   display="inline-block" 
                   fontWeight="bold" 
                   textTransform="capitalize"
                   color="teal.700"
                 >
-                    {k.replaceAll('_', ' ')}:
+                  Frame Colors: 
                 </Text>
                 <span>{' '}</span> 
                 <Text 
                   wordBreak="break-all" 
                   display="inline-block"
                 >
-                  {
-                    isBoolean(v) 
-                      ? v.toString() 
-                      : isDateNum(k)
-                        ? formatDate(v)
-                        : v
-                  }
+                  { data.frame_colors.join(', ') }
                 </Text>
               </Box>
-            ))
-          }
-          <Box display="inline-block" py="1" px="2" rounded="md">
-            <Text
-              display="inline-block" 
-              fontWeight="bold" 
-              textTransform="capitalize"
-              color="teal.700"
-            >
-              Frame Colors: 
-            </Text>
-            <span>{' '}</span> 
-            <Text 
-              wordBreak="break-all" 
-              display="inline-block"
-            >
-              { data.frame_colors.join(', ') }
-            </Text>
-          </Box>
-          <Divider orientation="horizontal"/>
-          <Heading mt="4" mb="2" color="teal.500" as="h3" size="md">Stolen Record</Heading>
-          <Box w="full" mt="2" mb="4">
-            <GoogleMap 
-              latitude={data.stolen_record.latitude} 
-              longitude={data.stolen_record.longitude}
-            />
-          </Box>
-          <Box>
-            {
-              Object.entries(data.stolen_record).map(([k, v]) => (
-                (v && !isNestObj(k) && !isImageUrl(v)) && 
-                <Box display="inline-block" key={k} py="1" px="2" rounded="md">
-                  <Text
-                    display="inline-block" 
-                    fontWeight="bold" 
-                    textTransform="capitalize"
-                    color="teal.700"
-                  >
-                      {k.replaceAll('_', ' ')}:
-                  </Text>
-                  <span>{' '}</span> 
-                  <Text 
-                    wordBreak="break-all" 
-                    display="inline-block"
-                  >
-                    {
-                      isBoolean(v) 
-                        ? v.toString() 
-                        : isDateNum(k)
-                          ? formatDate(v)
-                          : v
-                    }
-                  </Text>
-                </Box>
-              ))
-            }
-          </Box>
-          {data.components.length > 0 &&
-            <>
-              <Divider orientation="horizontal" />
-              <Heading mt="4" mb="2" color="teal.500" as="h3" size="md">Components</Heading>
+              <Divider orientation="horizontal"/>
+              <Heading mt="4" mb="2" color="teal.500" as="h3" size="md">Stolen Record</Heading>
+              <Box w="full" mt="2" mb="4">
+                <GoogleMap 
+                  latitude={data.stolen_record.latitude} 
+                  longitude={data.stolen_record.longitude}
+                />
+              </Box>
               <Box>
-                {data.components.map(component => (
-                  <Box key={component.id} p="3" m="2" rounded="md" borderColor="teal.400" borderWidth="1px">
-                    {Object.entries(component).map(([k, v]) => (
-                      (v && !isNestObj(k) && !isImageUrl(v)) && 
-                        <Box key={k} display="inline-block" py="1" px="2" rounded="md">
-                          <Text
-                            display="inline-block" 
-                            fontWeight="bold" 
-                            textTransform="capitalize"
-                            color="teal.700"
-                          >
-                              {k.replaceAll('_', ' ')}:
-                          </Text>
-                          <span>{' '}</span> 
-                          <Text 
-                            wordBreak="break-all" 
-                            display="inline-block"
-                          >
-                            {
-                              isBoolean(v) 
-                                ? v.toString() 
-                                : isDateNum(k)
-                                  ? formatDate(v)
-                                  : v
-                            }
-                          </Text>
-                        </Box>
+                {
+                  Object.entries(data.stolen_record).map(([k, v]) => (
+                    (v && !isNestObj(k) && !isImageUrl(v)) && 
+                    <Box display="inline-block" key={k} py="1" px="2" rounded="md">
+                      <Text
+                        display="inline-block" 
+                        fontWeight="bold" 
+                        textTransform="capitalize"
+                        color="teal.700"
+                      >
+                          {k.replaceAll('_', ' ')}:
+                      </Text>
+                      <span>{' '}</span> 
+                      <Text 
+                        wordBreak="break-all" 
+                        display="inline-block"
+                      >
+                        {
+                          isBoolean(v) 
+                            ? v.toString() 
+                            : isDateNum(k)
+                              ? formatDate(v)
+                              : v
+                        }
+                      </Text>
+                    </Box>
+                  ))
+                }
+              </Box>
+              {data.components.length > 0 &&
+                <>
+                  <Divider orientation="horizontal" />
+                  <Heading w="full" mt="4" mb="2" color="teal.500" as="h3" size="md">Components</Heading>
+                  <Box>
+                    {data.components.map(component => (
+                      <Box key={component.id} p="3" m="2" rounded="md" borderColor="teal.400" borderWidth="1px">
+                        {Object.entries(component).map(([k, v]) => (
+                          (v && !isNestObj(k) && !isImageUrl(v)) && 
+                            <Box key={k} display="inline-block" py="1" px="2" rounded="md">
+                              <Text
+                                display="inline-block" 
+                                fontWeight="bold" 
+                                textTransform="capitalize"
+                                color="teal.700"
+                              >
+                                  {k.replaceAll('_', ' ')}:
+                              </Text>
+                              <span>{' '}</span> 
+                              <Text 
+                                wordBreak="break-all" 
+                                display="inline-block"
+                              >
+                                {
+                                  isBoolean(v) 
+                                    ? v.toString() 
+                                    : isDateNum(k)
+                                      ? formatDate(v)
+                                      : v
+                                }
+                              </Text>
+                            </Box>
+                        ))}
+                      </Box>
                     ))}
                   </Box>
-                ))}
-              </Box>
-            </>
-          }
-          
-        </Flex>
-      </Flex>
+                </>
+              }
+              
+            </Flex>
+          </Flex>
+        </Box>
+        <Box display="flex" justifyContent="center" alignItems="center" bg='teal.700' color='white' padding={'5'}>
+          <Text fontSize="xs">© 2021 Lorem</Text>
+      </Box>
+      </>
     );
   } else {
     return (
